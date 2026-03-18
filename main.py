@@ -1,6 +1,25 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app =FastAPI()
+
+class Product(BaseModel):                       # Pydantic Model
+    name:str
+    price:int
+    in_stock:bool
+
+@app.post("/products")
+async def create_product(product:Product):
+    return{"message":"Product created Successfully!", "data":product.model_dump}
+
+class User(BaseModel):
+    name:str
+    email:str
+    age:int
+
+@app.post("/users")
+async def create_user(user:User):
+    return {"message":"User created!", "user":user.model_dump}
 
 @app.get("/user/{user_id}/post/{post_id}")      # path parameters
 async def get_user(user_id:int, post_id:int):
